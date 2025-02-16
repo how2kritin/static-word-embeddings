@@ -1,0 +1,21 @@
+Loading WordSim353 dataset...
+Loaded 353 word pairs from WordSim353
+
+Loading word embeddings...
+Please provide path: word_embeddings/cbow.pt
+Loaded embeddings with dimensions: torch.Size([20615, 300])
+Vocabulary size: 20615
+
+Computing cosine similarities...
+
+Results:
+Number of valid word pairs: 298
+Number of skipped pairs: 55
+Spearman's correlation: 0.1398
+
+Results have been saved to 'similarity_results.csv'
+Skipped pairs have been saved to 'skipped_pairs.csv'
+
+Skipped pairs statistics:
+Total missing words: 58
+Average missing words per skipped pair: 1.05
