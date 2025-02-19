@@ -291,7 +291,7 @@ def main():
         batch_size=256,
         num_epochs=5,
         learning_rate=0.001,
-        save_path='skipgram_word2vec_brown.pt'
+        save_path='skipgram.pt'
     )
 
     # Test similar words

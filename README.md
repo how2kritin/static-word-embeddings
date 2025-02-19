@@ -1,1 +1,2 @@
-# static-word-embeddings
+# Static Word Embeddings
+

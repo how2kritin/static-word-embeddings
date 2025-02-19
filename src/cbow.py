@@ -290,13 +290,13 @@ def main():
         num_negative=5,
         min_count=3,
         batch_size=256,
-        num_epochs=5,
+        num_epochs=10,
         learning_rate=0.001,
-        save_path='brown_word2vec.pt'
+        save_path='cbow.pt'
     )
 
     # Load trained model
-    model, vocab, metadata = load_model('brown_word2vec.pt')
+    model, vocab, metadata = load_model('cbow.pt')
 
     # Test similar words with progress bar
     test_words = ['king', 'queen', 'man', 'woman', 'city', 'computer']

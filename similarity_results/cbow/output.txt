@@ -11,11 +11,10 @@ Computing cosine similarities...
 Results:
 Number of valid word pairs: 298
 Number of skipped pairs: 55
-Spearman's correlation: 0.1398
+Spearman's correlation: 0.1904
 
 Results have been saved to 'similarity_results.csv'
 Skipped pairs have been saved to 'skipped_pairs.csv'
 
 Skipped pairs statistics:
 Total missing words: 58
-Average missing words per skipped pair: 1.05

@@ -93,7 +93,7 @@ def main():
 
     # Load word embeddings
     print("\nLoading word embeddings...")
-    inp_path = input("Please provide path: ")
+    inp_path = input("Please provide path to word embeddings: ")
     try:
         embeddings_dict = load_embeddings(inp_path)
     except Exception as e:
