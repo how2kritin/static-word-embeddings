@@ -2,3 +2,4 @@
 .venv
 word_embeddings/
 src/plot.py
+Report.pdf

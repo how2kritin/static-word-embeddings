@@ -10,8 +10,8 @@ warnings.filterwarnings('ignore')
 
 def load_wordsim353():
     """
-    Load the WordSim353 dataset.
-    Returns a pandas DataFrame with columns: word1, word2, similarity_score
+    Load the WordSim353Crowd dataset.
+    Returns a pandas DataFrame with columns: Word 1, Word 2, Human (Mean)
     """
     dataset_path = "corpus/wordsim353crowd.csv"
     df = pd.read_csv(dataset_path, delimiter=',')
