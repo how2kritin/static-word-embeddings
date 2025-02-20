@@ -47,6 +47,10 @@ python3 -m src.skipgram
 
 # Word Similarity Task
 
+> [!NOTE]
+> The dataset and the columns on which this task will be performed are all HARD-CODED in [wordsim.py](src/wordsim.py).
+> Please make all the necessary changes in order to use a different dataset for this task.
+
 ## Instructions to run
 
 ```bash
