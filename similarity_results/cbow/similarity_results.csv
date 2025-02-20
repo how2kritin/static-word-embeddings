@@ -1,4 +1,4 @@
-Word1,Word2,Human_Score,Computed_Similarity
+Word 1,Word 2,Human (Mean),Cosine Similarity
 admission,ticket,5.536,0.2530438303947449
 alcohol,chemistry,4.125,0.29685068130493164
 aluminum,metal,6.625,0.5719018578529358

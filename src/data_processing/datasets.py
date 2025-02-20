@@ -13,10 +13,9 @@ class CBOWDataset(Dataset):
         self.window_size = window_size
         self.data = []
 
-        # Create training pairs with progress bar
         for sentence in tqdm(sentences, desc="Creating training pairs"):
-            word_indices = [self.vocab.get_index(word) for word in sentence]
-            word_indices = [idx for idx in word_indices if idx != -1]  # Remove unknown words
+            word_indices = [self.vocab.word2idx[word] for word in sentence]
+            word_indices = [idx for idx in word_indices if idx != -1]  # remove unknown words
 
             for target_pos in range(len(word_indices)):
                 context_indices = []
@@ -27,7 +26,7 @@ class CBOWDataset(Dataset):
 
                 if context_indices:
                     while len(context_indices) < 2 * window_size:
-                        context_indices.append(0)  # Pad with 0
+                        context_indices.append(0)  # pad with 0 (essentially, that idx is treated to be <PAD>)
                     self.data.append((context_indices, word_indices[target_pos]))
 
     def __len__(self):
@@ -44,22 +43,18 @@ class SkipgramDataset(Dataset):
         self.window_size = window_size
         self.data = []
 
-        # Create training pairs with progress bar
         for sentence in tqdm(sentences, desc="Creating training pairs"):
-            word_indices = [self.vocab.get_index(word) for word in sentence]
-            word_indices = [idx for idx in word_indices if idx != -1]  # Remove unknown words
+            word_indices = [self.vocab.word2idx[word] for word in sentence]
+            word_indices = [idx for idx in word_indices if idx != -1]  # remove unknown words
 
             for center_pos in range(len(word_indices)):
-                # For each context position
-                for context_pos in range(
-                    max(0, center_pos - window_size),
-                    min(len(word_indices), center_pos + window_size + 1)
-                ):
+                # for each context position
+                for context_pos in range(max(0, center_pos - window_size),
+                                         min(len(word_indices), center_pos + window_size + 1)):
                     if context_pos != center_pos:
-                        self.data.append((
-                            word_indices[center_pos],  # center word
-                            word_indices[context_pos]  # context word
-                        ))
+                        self.data.append((word_indices[center_pos],  # center word
+                                          word_indices[context_pos]  # context word
+                                          ))
 
     def __len__(self):
         return len(self.data)

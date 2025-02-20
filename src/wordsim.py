@@ -1,14 +1,17 @@
+import argparse
+import warnings
+
 import numpy as np
 import pandas as pd
 import torch
+from pandas import DataFrame
 from scipy.spatial.distance import cosine
 from scipy.stats import spearmanr
-import warnings
 
 warnings.filterwarnings('ignore')
 
 
-def load_wordsim353():
+def load_wordsim353crowd() -> DataFrame:
     """
     Load the WordSim353Crowd dataset.
     Returns a pandas DataFrame with columns: Word 1, Word 2, Human (Mean)
@@ -18,16 +21,15 @@ def load_wordsim353():
     return df
 
 
-def load_embeddings(path):
+def load_embeddings(path) -> dict:
     """
     Load PyTorch word embeddings with vocabulary mapping
     """
     saved_data = torch.load(path)
-    embeddings = saved_data['embeddings']  # This is the embedding matrix
+    embeddings = saved_data['embeddings']
     vocab_state = saved_data['vocab_state']
     word2idx = vocab_state['word2idx']
 
-    # Create a dictionary mapping words to their embeddings
     embeddings_dict = {}
     for word, idx in word2idx.items():
         embeddings_dict[word] = embeddings[idx]
@@ -38,9 +40,9 @@ def load_embeddings(path):
     return embeddings_dict
 
 
-def compute_cosine_similarity(vec1, vec2):
+def compute_cosine_similarity(vec1, vec2) -> float:
     """
-    Compute cosine similarity between two vectors
+    Compute the cosine similarity between two vectors
     """
     if torch.is_tensor(vec1):
         vec1 = vec1.cpu().numpy()
@@ -60,13 +62,10 @@ def compute_similarities(word_pairs, embeddings_dict):
     for idx, row in word_pairs.iterrows():
         word1, word2 = row['Word 1'].lower(), row['Word 2'].lower()
 
-        # Check if both words exist in the vocabulary
         if word1 in embeddings_dict and word2 in embeddings_dict:
-            # Get word vectors
             vec1 = embeddings_dict[word1]
             vec2 = embeddings_dict[word2]
 
-            # Compute cosine similarity
             similarity = compute_cosine_similarity(vec1, vec2)
             similarities.append(similarity)
             valid_indices.append(idx)
@@ -81,26 +80,22 @@ def compute_similarities(word_pairs, embeddings_dict):
     return np.array(similarities), valid_indices, skipped_pairs
 
 
-def main():
-    # Load WordSim353 dataset
-    print("Loading WordSim353 dataset...")
+def main(inp_path: str):
+    print("Loading WordSim353Crowd dataset...")
     try:
-        wordsim_df = load_wordsim353()
-        print(f"Loaded {len(wordsim_df)} word pairs from WordSim353")
+        wordsim_df = load_wordsim353crowd()
+        print(f"Loaded {len(wordsim_df)} word pairs from WordSim353Crowd")
     except Exception as e:
-        print(f"Error loading WordSim353 dataset: {e}")
+        print(f"Error loading WordSim353Crowd dataset: {e}")
         return
 
-    # Load word embeddings
     print("\nLoading word embeddings...")
-    inp_path = input("Please provide path to word embeddings: ")
     try:
         embeddings_dict = load_embeddings(inp_path)
     except Exception as e:
         print(f"Error loading word embeddings: {e}")
         return
 
-    # Compute cosine similarities
     print("\nComputing cosine similarities...")
     computed_similarities, valid_indices, skipped_pairs = compute_similarities(wordsim_df, embeddings_dict)
 
@@ -108,44 +103,27 @@ def main():
         print("No valid word pairs found in the embeddings!")
         return
 
-    # Get the human-annotated scores for valid pairs
     human_scores = wordsim_df.iloc[valid_indices]['Human (Mean)'].values
 
-    # Calculate Spearman's correlation
+    # calculate Spearman's correlation between computed Cosine Similarities and human scores.
     correlation, _ = spearmanr(computed_similarities, human_scores)
 
-    # Print results
+
     print("\nResults:")
     print(f"Number of valid word pairs: {len(valid_indices)}")
     print(f"Number of skipped pairs: {len(skipped_pairs)}")
     print(f"Spearman's correlation: {correlation:.4f}")
+    results_df = pd.DataFrame(
+        {'Word 1': wordsim_df.iloc[valid_indices]['Word 1'], 'Word 2': wordsim_df.iloc[valid_indices]['Word 2'],
+            'Human (Mean)': human_scores, 'Cosine Similarity': computed_similarities})
 
-    # Create results DataFrame
-    results_df = pd.DataFrame({
-        'Word1': wordsim_df.iloc[valid_indices]['Word 1'],
-        'Word2': wordsim_df.iloc[valid_indices]['Word 2'],
-        'Human_Score': human_scores,
-        'Computed_Similarity': computed_similarities
-    })
-
-    # Save results
     results_file = 'similarity_results.csv'
     results_df.to_csv(results_file, index=False)
     print(f"\nResults have been saved to '{results_file}'")
 
-    # Save skipped pairs with more detailed information
-    if skipped_pairs:
-        skipped_df = pd.DataFrame(skipped_pairs, columns=['Word 1', 'Word 2', 'Missing_Words'])
-        skipped_file = 'skipped_pairs.csv'
-        skipped_df.to_csv(skipped_file, index=False)
-        print(f"Skipped pairs have been saved to '{skipped_file}'")
-
-        # Print some statistics about skipped pairs
-        print("\nSkipped pairs statistics:")
-        total_missing_words = sum(len(missing) for _, _, missing in skipped_pairs)
-        print(f"Total missing words: {total_missing_words}")
-        print(f"Average missing words per skipped pair: {total_missing_words / len(skipped_pairs):.2f}")
-
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser()
+    parser.add_argument("we", type=str, help="Path to the word embeddings.")
+    args = parser.parse_args()
+    main(args.we)

@@ -1,8 +1,7 @@
-Loading WordSim353 dataset...
-Loaded 353 word pairs from WordSim353
+Loading WordSim353Crowd dataset...
+Loaded 353 word pairs from WordSim353Crowd
 
 Loading word embeddings...
-Please provide path: word_embeddings/svd.pt
 Loaded embeddings with dimensions: torch.Size([20615, 300])
 Vocabulary size: 20615
 
@@ -14,7 +13,3 @@ Number of skipped pairs: 55
 Spearman's correlation: 0.2268
 
 Results have been saved to 'similarity_results.csv'
-Skipped pairs have been saved to 'skipped_pairs.csv'
-
-Skipped pairs statistics:
-Total missing words: 58

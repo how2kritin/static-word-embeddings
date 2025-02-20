@@ -13,7 +13,8 @@ from src.models.cbow import CBOW
 from src.models.skipgram import SkipGram
 
 
-def train_model(model, vocab, dataloader, num_epochs, num_negative, device, learning_rate):
+def train_model(model: CBOW | SkipGram, vocab: Word2VecVocab, dataloader: DataLoader, num_epochs: int, num_negative: int,
+                device: torch.device, learning_rate: float) -> CBOW | SkipGram:
     optimizer = optim.Adam(model.parameters(), lr=learning_rate)
 
     logging.info("Starting training...")

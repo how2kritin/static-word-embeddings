@@ -2,6 +2,8 @@
 
 ## Roll No.: 2022101071
 
+## Google Drive Link to Word Embeddings: https://drive.google.com/drive/folders/1O5rCPF1sixmt-ERV2r8QeO-1AqbUGWKI?usp=sharing
+
 ---
 
 # Analysis

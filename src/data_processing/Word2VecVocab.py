@@ -22,7 +22,7 @@ class Word2VecVocab:
         self.word_freqs = np.power(self.word_freqs, 0.75)
         self.word_freqs = self.word_freqs / np.sum(self.word_freqs)
 
-    def __len__(self):
+    def __len__(self) -> int:
         return len(self.word2idx)
 
     def sample_negative_words(self, batch_size: int, num_negative: int) -> torch.Tensor:

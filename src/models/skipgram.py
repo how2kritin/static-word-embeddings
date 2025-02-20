@@ -1,3 +1,5 @@
+from typing import Tuple
+
 import torch
 from torch import nn
 
@@ -8,12 +10,12 @@ class SkipGram(nn.Module):
         self.embeddings_input = nn.Embedding(vocab_size, embedding_dim)
         self.embeddings_output = nn.Embedding(vocab_size, embedding_dim)
 
-        # Initialize embeddings
+        # initialize embeddings
         initrange = 0.5 / embedding_dim
         self.embeddings_input.weight.data.uniform_(-initrange, initrange)
         self.embeddings_output.weight.data.uniform_(-initrange, initrange)
 
-    def forward(self, center_words, context_words, negative_samples):
+    def forward(self, center_words, context_words, negative_samples) -> Tuple[torch.Tensor, torch.Tensor]:
         # get center word embeddings
         center_embeds = self.embeddings_input(center_words).squeeze(1)  # [batch_size, embed_dim]
 

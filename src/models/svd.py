@@ -59,7 +59,7 @@ class WordEmbeddingSVD:
     def apply_svd(self, cooccurrence_matrix: torch.Tensor) -> torch.Tensor:
         logging.info("Applying SVD...")
 
-        # Process the log operation in chunks
+        # process the log operation in chunks (else it takes way too long)
         chunk_size = 1024
         rows, cols = cooccurrence_matrix.shape
         log_cooccurrence = torch.empty_like(cooccurrence_matrix)
@@ -98,47 +98,28 @@ class WordEmbeddingSVD:
         return self.embeddings[self.word2idx[word]]
 
     def save(self, path: str):
-        """Save SVD model, embeddings and vocabulary to file in the same format as Skip-gram"""
-        save_data = {
-            'embeddings': self.embeddings.detach().cpu(),
-            'vocab_state': {
-                'word2idx': self.word2idx,
-                'idx2word': self.idx2word,
-            },
-            'metadata': {
-                'embedding_dim': self.embedding_dim,
-                'vocab_size': len(self.word2idx),
-                'model_type': 'svd'
-            }
-        }
+        save_data = {'embeddings': self.embeddings.detach().cpu(),
+                     'vocab_state': {'word2idx': self.word2idx, 'idx2word': self.idx2word, },
+                     'metadata': {'embedding_dim': self.embedding_dim, 'vocab_size': len(self.word2idx),
+                                  'model_type': 'svd'}}
         torch.save(save_data, path)
         logging.info(f"Saved SVD model to {path}")
 
     @classmethod
     def load(cls, path: str):
-        """Load saved SVD model, embeddings and vocabulary"""
         if not os.path.exists(path):
             raise FileNotFoundError(f"No saved model found at {path}")
 
         device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
         save_data = torch.load(path, map_location=device)
 
-        # Create instance with saved metadata
-        instance = cls(
-            window_size=3,  # Default values since they're not needed for inference
-            min_freq=3,
-            embedding_dim=save_data['metadata']['embedding_dim']
-        )
+        instance = cls(window_size=3, min_freq=3, embedding_dim=save_data['metadata']['embedding_dim'])
 
-        # Load model state
         instance.embeddings = save_data['embeddings'].to(device)
-
-        # Load vocabulary state
         vocab_state = save_data['vocab_state']
         instance.word2idx = vocab_state['word2idx']
         instance.idx2word = vocab_state['idx2word']
 
-        # Log loading info
         logging.info(f"Model loaded from {path}")
         logging.info(f"Loaded model type: {save_data['metadata']['model_type']}")
         logging.info(f"Vocabulary size: {save_data['metadata']['vocab_size']}")

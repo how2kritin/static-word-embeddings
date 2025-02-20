@@ -1,3 +1,5 @@
+from typing import Tuple
+
 import torch
 from torch import nn
 
@@ -8,12 +10,12 @@ class CBOW(nn.Module):
         self.embeddings_input = nn.Embedding(vocab_size, embedding_dim)
         self.embeddings_output = nn.Embedding(vocab_size, embedding_dim)
 
-        # Fix initialization
+        # initialize embeddings
         initrange = 0.5 / embedding_dim
         self.embeddings_input.weight.data.uniform_(-initrange, initrange)
         self.embeddings_output.weight.data.uniform_(-initrange, initrange)
 
-    def forward(self, contexts, targets, negative_samples):
+    def forward(self, contexts, targets, negative_samples) -> Tuple[torch.Tensor, torch.Tensor]:
         # get context embeddings and average them
         context_embeds = self.embeddings_input(contexts).mean(dim=1)  # [batch_size, embed_dim]
 
