@@ -9,7 +9,7 @@
 # Analysis
 
 All three models were trained on the _Brown Corpus (all sentences)_, and their word embeddings were analysed on the
-_WordSim353 (Crowd)_ task, while their performance was evaluated using the _Spearman Rank Correlation_ metric.
+[_WordSim353 (Crowd)_](https://www.kaggle.com/datasets/julianschelb/wordsim353-crowd) task, while their performance was evaluated using the _Spearman Rank Correlation_ metric.
 
 ## Hyperparameters used:
 
