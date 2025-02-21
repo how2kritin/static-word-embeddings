@@ -41,7 +41,7 @@ class WordEmbeddingSVD:
         cooccurrence = torch.zeros((vocab_size, vocab_size), device=self.device)
 
         for sentence in tqdm(sentences, desc="Building co-occurrence matrix"):
-            indices = [self.word2idx[word] for word in sentence if word in self.word2idx]
+            indices = [self.word2idx.get(word.lower(), -1) for word in sentence if word in self.word2idx]
 
             for center_idx, center_word_idx in enumerate(indices):
                 context_idx_start = max(0, center_idx - self.window_size)
@@ -95,7 +95,7 @@ class WordEmbeddingSVD:
     def get_word_vector(self, word: str) -> torch.Tensor:
         if word not in self.word2idx:
             raise KeyError(f"Word '{word}' not in vocabulary")
-        return self.embeddings[self.word2idx[word]]
+        return self.embeddings[self.word2idx.get(word.lower(), -1)]
 
     def save(self, path: str):
         save_data = {'embeddings': self.embeddings.detach().cpu(),

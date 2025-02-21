@@ -13,8 +13,8 @@ from src.models.cbow import CBOW
 from src.models.skipgram import SkipGram
 
 
-def train_model(model: CBOW | SkipGram, vocab: Word2VecVocab, dataloader: DataLoader, num_epochs: int, num_negative: int,
-                device: torch.device, learning_rate: float) -> CBOW | SkipGram:
+def train_model(model: CBOW | SkipGram, vocab: Word2VecVocab, dataloader: DataLoader, num_epochs: int,
+                num_negative: int, device: torch.device, learning_rate: float) -> CBOW | SkipGram:
     optimizer = optim.Adam(model.parameters(), lr=learning_rate)
 
     logging.info("Starting training...")
@@ -61,13 +61,11 @@ def train_handler(model_type: Literal['cbow', 'skipgram'], sentences: List[List[
     logging.info(f"Vocabulary size: {len(vocab)}")
 
     logging.info("Creating dataset...")
-    dataset = {'cbow': CBOWDataset(sentences, vocab, window_size=window_size),
-               'skipgram': SkipgramDataset(sentences, vocab, window_size=window_size)}[model_type]
+    dataset = {'cbow': CBOWDataset, 'skipgram': SkipgramDataset}[model_type](sentences, vocab, window_size=window_size)
     dataloader = DataLoader(dataset, batch_size=batch_size, shuffle=True)
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    model = {'cbow': CBOW(len(vocab), embedding_dim).to(device),
-             'skipgram': SkipGram(len(vocab), embedding_dim).to(device)}[model_type]
+    model = {'cbow': CBOW, 'skipgram': SkipGram}[model_type](len(vocab), embedding_dim).to(device)
 
     train_model(model, vocab, dataloader, num_epochs, num_negative, device, learning_rate)
 

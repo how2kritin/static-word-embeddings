@@ -11,13 +11,13 @@ def find_similar_words(word: str, word2idx: dict, embeddings: Any, top_k: int = 
         return []
 
     idx2word = {idx: word for word, idx in word2idx.items()}
-    word_vec = embeddings[word2idx]
+    word_vec = embeddings[word2idx.get(word.lower(), -1)]
 
     similarities = torch.nn.functional.cosine_similarity(word_vec.unsqueeze(0), embeddings, dim=1)
     top_indices = similarities.argsort(descending=True)
 
     most_similar = []
     for idx in top_indices[1:top_k + 1]:  # skip the first one as that's just the input word
-        most_similar.append((idx2word[idx.item()], similarities[idx].item()))
+        most_similar.append((idx2word.get(idx.item(), "<UNK>"), similarities[idx].item()))
 
     return most_similar

@@ -14,7 +14,7 @@ class CBOWDataset(Dataset):
         self.data = []
 
         for sentence in tqdm(sentences, desc="Creating training pairs"):
-            word_indices = [self.vocab.word2idx[word] for word in sentence]
+            word_indices = [self.vocab.word2idx.get(word.lower(), -1) for word in sentence]
             word_indices = [idx for idx in word_indices if idx != -1]  # remove unknown words
 
             for target_pos in range(len(word_indices)):
@@ -44,7 +44,7 @@ class SkipgramDataset(Dataset):
         self.data = []
 
         for sentence in tqdm(sentences, desc="Creating training pairs"):
-            word_indices = [self.vocab.word2idx[word] for word in sentence]
+            word_indices = [self.vocab.word2idx.get(word.lower(), -1) for word in sentence]
             word_indices = [idx for idx in word_indices if idx != -1]  # remove unknown words
 
             for center_pos in range(len(word_indices)):
