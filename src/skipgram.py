@@ -11,7 +11,7 @@ from src.common.utils import get_sentences_from_brown_corpus
 
 def main(path_to_we: str):
     sentences = get_sentences_from_brown_corpus()
-    if os.path.exists(path_to_we):
+    if path_to_we and os.path.exists(path_to_we):
         print("Loading pretrained word embeddings.")
         model, vocab, metadata = load_model('skipgram', path_to_we)
     else:
