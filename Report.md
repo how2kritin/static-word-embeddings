@@ -9,7 +9,8 @@
 # Analysis
 
 All three models were trained on the _Brown Corpus (all sentences)_, and their word embeddings were analysed on the
-[_WordSim353 (Crowd)_](https://www.kaggle.com/datasets/julianschelb/wordsim353-crowd) task, while their performance was evaluated using the _Spearman Rank Correlation_ metric.
+[_WordSim353 (Crowd)_](https://www.kaggle.com/datasets/julianschelb/wordsim353-crowd) task, while their performance was
+evaluated using the _Spearman Rank Correlation_ metric.
 
 ## Hyperparameters used:
 
@@ -40,7 +41,17 @@ The following parameters were used for training the embeddings:
 
 ---
 
-## Spearman's Rank Correlation for the models
+## Graphical analysis of these models
+
+![rank_rank_correlation_scatter.png](figures/rank_rank_correlation_scatter.png)
+
+From the above Rank-Rank Scatter plot, we can see that all three models are not that great at capturing human perception
+of word similarity (which is represented by the human assigned scores). This can be inferred from the fact that there's
+a lot of deviation from the perfect correlation line for each of the 3 models.
+
+However, among these three methods, **Skipgram seems to produce the best word embeddings of the three**, **followed by
+SVD and lastly CBOW** (though the difference between the latter two isn't as obvious from the scatter plot alone), by
+observing that there's more points closer to the perfect correlation line than for the others.
 
 ![spearman_rank_correlation.png](figures/spearman_rank_correlation.png)
 
@@ -138,12 +149,13 @@ examples during training.
 ## Additional Data
 
 **Please find the results for the similarity task here:**
-1. **SVD:** 
-   1. [output.txt](similarity_results/svd/output.txt)
-   2. [similarity_results.csv](similarity_results/svd/similarity_results.csv)
+
+1. **SVD:**
+    1. [output.txt](similarity_results/svd/output.txt)
+    2. [similarity_results.csv](similarity_results/svd/similarity_results.csv)
 2. **CBOW:**
-   1. [output.txt](similarity_results/cbow/output.txt)
-   2. [similarity_results.csv](similarity_results/cbow/similarity_results.csv)
+    1. [output.txt](similarity_results/cbow/output.txt)
+    2. [similarity_results.csv](similarity_results/cbow/similarity_results.csv)
 3. **Skipgram:**
-   1. [output.txt](similarity_results/skipgram/output.txt)
-   2. [similarity_results.csv](similarity_results/skipgram/similarity_results.csv)
+    1. [output.txt](similarity_results/skipgram/output.txt)
+    2. [similarity_results.csv](similarity_results/skipgram/similarity_results.csv)

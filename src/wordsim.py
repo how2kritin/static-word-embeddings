@@ -103,9 +103,9 @@ def main(inp_path: str):
         print("No valid word pairs found in the embeddings!")
         return
 
-    human_scores = wordsim_df.iloc[valid_indices]['Human (Mean)'].values
+    human_scores = wordsim_df.loc[valid_indices, 'Human (Mean)'].values
 
-    # calculate Spearman's correlation between computed Cosine Similarities and human scores.
+    # calculate Spearman's correlation between computed cosine similarities and human scores.
     correlation, _ = spearmanr(computed_similarities, human_scores)
 
 
