@@ -17,7 +17,7 @@ def main(path_to_we: str):
     else:
         print("Training model as pretrained word embeddings do not exist.")
         model, vocab = train_handler('cbow', sentences, embedding_dim=300, window_size=3, num_negative=5, min_count=3,
-                                     batch_size=256, num_epochs=10, learning_rate=0.001, save_path='cbow.pt')
+                                     batch_size=512, num_epochs=30, learning_rate=0.001, save_path='cbow.pt')
 
     test_words = ['king', 'queen', 'man', 'woman', 'city']
     for word in tqdm(test_words, desc="Testing similar words"):

@@ -10,6 +10,6 @@ Computing cosine similarities...
 Results:
 Number of valid word pairs: 298
 Number of skipped pairs: 55
-Spearman's correlation: 0.1904
+Spearman's correlation: 0.2510
 
 Results have been saved to 'similarity_results.csv'

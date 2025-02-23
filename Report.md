@@ -25,8 +25,8 @@ The following parameters were used for training the embeddings:
     - Word Embedding Dimension: 300
     - Window Size: 3
     - Minimum Frequency: 3
-    - Batch Size: 256
-    - Number of Epochs: 10
+    - Batch Size: 512
+    - Number of Epochs: 30
     - Learning Rate: 1e-3
     - Number of Negative Samples: 5
 
@@ -50,7 +50,7 @@ of word similarity (which is represented by the human assigned scores). This can
 a lot of deviation from the perfect correlation line for each of the 3 models.
 
 However, among these three methods, **Skipgram seems to produce the best word embeddings of the three**, **followed by
-SVD and lastly CBOW** (though the difference between the latter two isn't as obvious from the scatter plot alone), by
+CBOW and lastly SVD** (though the difference between the latter two isn't as obvious from the scatter plot alone), by
 observing that there's more points closer to the perfect correlation line than for the others.
 
 ![spearman_rank_correlation.png](figures/spearman_rank_correlation.png)
@@ -58,16 +58,13 @@ observing that there's more points closer to the perfect correlation line than f
 | Technique                       | Spearman Rank Correlation |
 |---------------------------------|---------------------------|
 | SVD                             | 0.2268                    |
-| CBOW with Negative Sampling     | 0.1904                    |
+| CBOW with Negative Sampling     | 0.2510                    |
 | Skipgram with Negative Sampling | 0.3238                    |
 
-Clearly, when trained on the same dataset with the same window size, **SVD** performs better than **CBOW**, and
+Clearly, when trained on the same dataset with the same window size, **CBOW** performs better than **SVD**, and
 **Skipgram** performs better than both of them, on the _WordSim_ task. Note that here, for the **Spearman Rank
 Correlation** value, higher is better, as it implies that for those similar pairs of words, the computed Cosine
 Similarity agrees better with human assigned scores.
-
-However, SVD takes much longer than CBOW to train and create the embeddings, and Skipgram takes about the same time as
-SVD (it is perhaps a little faster).
 
 ---
 
@@ -143,6 +140,16 @@ examples during training.
 1. It is computationally expensive to train (took about 17 minutes on an RTX 3060 for this task), as it tries to predict
    context for a given word (and there's a lot of possible context that can be predicted for a single word). As the size
    of the dataset increase, the time taken to train only becomes longer.
+
+---
+
+> [!INFORMATION]  
+> CBOW is better than SVD (as SVD is simply counting word frequencies), but not by a considerable amount. This is
+> because of the small corpus size, and also the fact that SVD tracks global context. On both counts, CBOW simply lacks
+> enough context to understand semantic relationships between words well.
+>
+> Meanwhile, Skipgram performs better than CBOW, by a considerable amount, because of the fact that it works well even
+> on smaller datasets like the Brown Corpus.
 
 ---
 
