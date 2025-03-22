@@ -6,10 +6,11 @@ from tqdm import tqdm
 from src.common.predict import find_similar_words
 from src.common.save_and_load import load_model
 from src.common.train import train_handler
-from src.common.utils import get_sentences_from_brown_corpus
+from src.common.utils import get_sentences_from_brown_corpus, set_seed
 
 
 def main(path_to_we: str):
+    set_seed(42)
     sentences = get_sentences_from_brown_corpus()
     if path_to_we and os.path.exists(path_to_we):
         print("Loading pretrained word embeddings.")

@@ -1,16 +1,21 @@
 import logging
+import random
 from typing import List
 
 import nltk
+import numpy as np
 import torch
 from nltk.corpus import brown
 
+def set_seed(seed=42):
+    random.seed(seed)
+    np.random.seed(seed)
+    torch.manual_seed(seed)
+    if torch.cuda.is_available():
+        torch.cuda.manual_seed_all(seed)
+
 
 def get_sentences_from_brown_corpus() -> List[List[str]]:
-    torch.manual_seed(42)
-    if torch.cuda.is_available():
-        torch.cuda.manual_seed_all(42)
-
     # download the brown corpus
     nltk.download('brown', quiet=True)
     logging.info("Loading and preprocessing Brown corpus...")
