@@ -1,5 +1,6 @@
 .idea
 .venv
-word_embeddings/
+word_embeddings/*
+!word_embeddings/.gitkeep
 src/plot.py
 Report.pdf
