@@ -17,6 +17,8 @@ class Word2VecVocab:
         self.word2idx = {word: idx for idx, word in enumerate(filtered_words.keys())}
         self.idx2word = {idx: word for word, idx in self.word2idx.items()}
 
+        # this is for negative sampling.
+        # ref: https://www.baeldung.com/cs/nlps-word2vec-negative-sampling
         self.word_counts = np.array([count for count in filtered_words.values()])
         self.word_freqs = self.word_counts / np.sum(self.word_counts)
         self.word_freqs = np.power(self.word_freqs, 0.75)
