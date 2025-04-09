@@ -6,6 +6,7 @@ import torch
 
 
 class Word2VecVocab:
+    # Ref for negative sampling: https://arxiv.org/pdf/1402.3722v1
     def __init__(self, sentences: List[List[str]], min_count: int = 5, max_vocab_size: int = 50000):
         self.min_count = min_count
         self.max_vocab_size = max_vocab_size
